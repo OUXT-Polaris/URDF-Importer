@@ -103,7 +103,7 @@ namespace Unity.Robotics.UrdfImporter
                 {
                   throw new Exception(standardOutput);
                 }
-                for(int i=0; i<split_list.GetLength(); i++)
+                for(int i=0; i<split_list.Length; i++)
                 {
                     if(i==0) {
                         path = standardOutput;
