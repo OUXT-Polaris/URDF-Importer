@@ -14,6 +14,8 @@ limitations under the License.
 
 using System.IO;
 using UnityEngine;
+using System.Diagnostics;
+using System;
 
 namespace Unity.Robotics.UrdfImporter
 {
@@ -86,7 +88,7 @@ namespace Unity.Robotics.UrdfImporter
             if (urdfPath.StartsWith(@"package://"))
             {
                 path = urdfPath.Substring(10).SetSeparatorChar();
-                var split_list = path.Split("/");
+                var split_list = path.Split('/');
                 ProcessStartInfo processStartInfo = new ProcessStartInfo("/bin/bash", "ros2 pkg prefix --share " + split_list[0]);
                 processStartInfo.CreateNoWindow = true;
                 processStartInfo.UseShellExecute = false;
@@ -99,7 +101,7 @@ namespace Unity.Robotics.UrdfImporter
                 int exitCode = process.ExitCode;
                 if(exitCode != 0)
                 {
-                  throw standardError(standardOutput);
+                  throw new Exception(standardOutput);
                 }
                 for(int i=0; i<split_list.GetLength(); i++)
                 {
@@ -111,7 +113,6 @@ namespace Unity.Robotics.UrdfImporter
                     }
                 }
                 return path;
-                // path = standardOutput + 
             }
             else
             {
