@@ -86,7 +86,32 @@ namespace Unity.Robotics.UrdfImporter
             if (urdfPath.StartsWith(@"package://"))
             {
                 path = urdfPath.Substring(10).SetSeparatorChar();
-                package_name = path.
+                var split_list = path.Split("/");
+                ProcessStartInfo processStartInfo = new ProcessStartInfo("/bin/bash", "ros2 pkg prefix --share " + split_list[0]);
+                processStartInfo.CreateNoWindow = true;
+                processStartInfo.UseShellExecute = false;
+                processStartInfo.RedirectStandardOutput = true;
+                processStartInfo.RedirectStandardError = true;
+                Process process = Process.Start(processStartInfo);
+                string standardOutput = process.StandardOutput.ReadToEnd();
+                string standardError = process.StandardError.ReadToEnd();
+                process.Close();
+                int exitCode = process.ExitCode;
+                if(exitCode != 0)
+                {
+                  throw standardError(standardOutput);
+                }
+                for(int i=0; i<split_list.GetLength(); i++)
+                {
+                    if(i==0) {
+                        path = standardOutput;
+                    }
+                    else {
+                        path = path + "/" + split_list[i];
+                    }
+                }
+                return path;
+                // path = standardOutput + 
             }
             else
             {
