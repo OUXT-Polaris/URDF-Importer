@@ -86,6 +86,7 @@ namespace Unity.Robotics.UrdfImporter
             if (urdfPath.StartsWith(@"package://"))
             {
                 path = urdfPath.Substring(10).SetSeparatorChar();
+                package_name = path.
             }
             else
             {
